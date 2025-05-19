@@ -1,0 +1,178 @@
+{% load static %}
+{% comment %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static 'css/images.jpg' %}" type="image/x-icon">
+  
+  <title>Zoon</title>
+  <link rel="stylesheet" href="{% static 'css/scm2.css' %}">
+  <body>
+   <div class="container">
+        <h1>Welcome, {{name}}!</h1>
+        <img src="{% static 'css/images.jpg' %}" alt="User Image">
+        <div class="options">        
+            <a href="{% url 'create_meeting' %}" class="option">New Meeting</a>
+            <a href="{% url 'join_room' %}" class="option">Join Meeting</a>
+            <a href="{% url 'logout' %}" class="option">Logout</a>
+        </div>
+  </body>
+</head>
+</html> {% endcomment %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intruder</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        {% comment %} /* General container styling */
+        .container {
+            text-align: center;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 40px;
+            color: #FF6F61; /* Color picked from the image */
+            margin-bottom: 20px;
+        }
+
+        /* Image styling - remove the circular frame and adjust size */
+        img {
+            height: 250px; /* Make the image larger */
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the options container */
+        .options {
+            margin-top: 20px;
+        }
+
+        /* Button-like link styling */
+        .option {
+            display: inline-block;
+            padding: 12px;
+            background-color: #97C1BC;
+            color: white !important; 
+            font-size: 28px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for the buttons */
+        .option:hover {
+            background-color: #7a9c97;
+        }
+
+        /* Responsive design for small screens */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 38px;
+            }
+
+            img {
+                height: 200px;
+            }
+
+            .option {
+                padding: 12px 25px;
+                font-size: 26px;
+            }
+        } {% endcomment %}
+        /* General container styling */
+        .container {
+            text-align: center;
+            padding: 60px 40px; /* Increased padding */
+            font-family: Arial, sans-serif;
+            max-width: 1300px; /* Added a max-width */
+            margin: auto; /* Center the container */
+        }
+        
+        /* Heading styling */
+        h1 {
+            font-size: 50px; /* Bigger heading */
+            color: #FF6F61;
+            margin-bottom: 30px;
+        }
+        
+        /* Image styling - larger image */
+        img {
+            height: 300px; /* Bigger image */
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 30px;
+        }
+        
+        /* Styling for the options container */
+        .options {
+            margin-top: 30px;
+        }
+        
+        /* Button-like link styling */
+        .option {
+            display: inline-block;
+            padding: 16px 30px; /* Bigger buttons */
+            background-color: #97C1BC;
+            color: white !important;
+            font-size: 32px;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        
+        /* Hover effect for the buttons */
+        .option:hover {
+            background-color: #7a9c97;
+        }
+        
+        /* Responsive design for small screens */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+            }
+        
+            h1 {
+                font-size: 42px;
+            }
+        
+            img {
+                height: 300px; /* Adjust image size for mobile */
+            }
+        
+            .option {
+                padding: 14px 24px;
+                font-size: 28px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{name}}!</h1>
+        <img src="{% static 'css/safe.jpg' %}" alt="User Image"> 
+        <div class="options">        
+            <a href="{% url 'create_meeting' %}" class="option">New Meeting</a>
+            <a href="{% url 'join_room' %}" class="option">Join Meeting</a>
+            <a href="{% url 'logout' %}" class="option">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Capture</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Capture Video</h2>
+<video id="video" width="640" height="480" autoplay></video>
+<button onclick="captureFrames()">Capture</button>
+
+<script>
+    async function captureFrames() {
+        const video = document.getElementById("video");
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        await video.play();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        const context = canvas.getContext('2d');
+
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL('image/jpeg');
+
+        // Send image data to Django backend for processing
+        $.post("/process_face/", { image_data: imageData }, function(response) {
+            if(response.redirect_url) {
+                window.location.href = response.redirect_url;
+            }
+        });
+    }
+</script>
+
+</body>
+</html> {% endcomment %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Verification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #FF6F61;
+            margin-bottom: 20px;
+        }
+
+        video {
+            border-radius: 8px;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        img.user-image {
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 20px;
+            background-color: #97C1BC;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #7a9c97;
+        }
+
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 30px;
+            }
+
+            .btn {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+
+            img.user-image {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ name }}!</h2>
+        <img src="{% static 'css/images.jpg' %}" alt="User Image" class="user-image">
+
+        <video id="video" autoplay muted playsinline></video>
+
+        <div class="buttons">
+            <a href="javascript:void(0);" class="btn" onclick="captureFrames()">Verify Yourself</a>
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        async function captureFrames() {
+            const video = document.getElementById("video");
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            await video.play();
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const context = canvas.getContext('2d');
+
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/jpeg');
+
+            $.post("/process_face/", { image_data: imageData }, function(response) {
+                if(response.redirect_url) {
+                    window.location.href = response.redirect_url;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

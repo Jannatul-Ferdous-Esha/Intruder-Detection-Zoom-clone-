@@ -1,0 +1,293 @@
+{% load static %}
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'css/images.jpg' %}" type="image/x-icon">
+  <title>Zoon</title>
+</head>
+<body>
+  <div class="container">
+    <div class="registration form">
+      <center><img src="{% static 'css/images.jpg' %}"></center>
+      <form action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" placeholder="Enter your first name" name="first_name">
+        <input type="text" placeholder="Enter your last name" name="last_name">
+        <input type="text" placeholder="Enter your email" name="email">
+        <input type="password" placeholder="Create a password" name="password1">
+        <input type="password" placeholder="Confirm your password" name="password2">
+        <input type="submit" class="button" value="Signup">
+        <center>
+          {% if error %}
+          <p style="color: red;">{{ error }}</p>
+          {% endif %}
+        </center>
+        
+      </form>
+      <div class="signup">
+        <span class="signup">Already have an account?
+          <a href="{% url 'login' %}"><label for="check">Signin</label></a>
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+</html> {% endcomment %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static 'css/safe.jpg' %}" type="image/x-icon">
+  <title>Zoon</title>
+  
+  <style>
+    {% comment %} * {
+        box-sizing: border-box; /* Ensures padding stays inside width */
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fa;
+        margin: 0;
+        padding: 0;
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .login {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+        text-align: center;
+    }
+
+    .login img {
+        width: 600px;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 30px;
+    }
+
+    input[type="text"], input[type="password"] {
+        padding: 14px;
+        font-size: 28px;
+        margin-bottom: 20px; /* Spacing between inputs */
+        border-radius: 5px;
+        border: 2px solid #ccc;
+        outline: none;
+        width: 100%;
+        transition: border 0.3s ease;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+        border-color: #FF6F61;
+    }
+
+    input[type="submit"] {
+        padding: 14px;
+        background-color: #97C1BC;
+        color: white;
+        font-size: 28px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        margin-bottom: 20px; /* Adds spacing below the button */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #7a9c97;
+    }
+
+    .signup p, .signup a {
+        font-size: 30px;
+    }
+
+    .message p {
+        margin: 10px 0;
+        font-size: 28px;
+    }
+
+    .message .success {
+        color: green;
+    }
+
+    .message .error {
+        color: red;
+    }
+
+    @media (max-width: 768px) {
+        .login {
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 38px;
+        }
+
+        input[type="text"], input[type="password"] {
+            font-size: 30px;
+        }
+
+        input[type="submit"] {
+            font-size: 30px;
+        }
+
+        .signup p, .signup a {
+            font-size: 28px;
+        }
+    } {% endcomment %}
+    * {
+      box-sizing: border-box; /* Ensures padding stays inside width */
+  }
+  
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 0;
+      font-size: 34px; /* Increased base font size */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+  }
+  
+  .login {
+      background-color: white;
+      padding: 80px; /* Increased padding for more breathing space */
+      border-radius: 12px; /* More rounded corners */
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); /* Bigger, softer shadow */
+      width: 100%;
+      max-width: 1200px; /* Wider form */
+      text-align: center;
+  }
+  
+  .login img {
+      width: 1030px; /* Larger image */
+      height: auto;
+      object-fit: contain;
+      margin-bottom: 40px; /* More space below image */
+  }
+  
+  input[type="text"], input[type="password"] {
+      padding: 18px; /* Bigger input fields */
+      font-size: 36px; /* Bigger input text */
+      margin-bottom: 24px;
+      border-radius: 8px; /* Smoother corners */
+      border: 2px solid #ccc;
+      outline: none;
+      width: 100%;
+      transition: border 0.3s ease;
+  }
+  
+  input[type="text"]:focus, input[type="password"]:focus {
+      border-color: #FF6F61;
+  }
+  
+  input[type="submit"] {
+      padding: 20px; /* Bigger button */
+      background-color: #97C1BC;
+      color: white;
+      font-size: 36px; /* Bigger button text */
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      margin-bottom: 30px; /* More space below the button */
+  }
+  
+  input[type="submit"]:hover {
+      background-color: #7a9c97;
+  }
+  
+  .signup p, .signup a {
+      font-size: 36px; /* Bigger signup text */
+  }
+  
+  .message p {
+      margin: 12px 0;
+      font-size: 34px; /* Bigger message font */
+  }
+  
+  .message .success {
+      color: green;
+  }
+  
+  .message .error {
+      color: red;
+  }
+  
+  /* Responsive design for small screens */
+  @media (max-width: 768px) {
+      .login {
+          padding: 50px;
+          max-width: 800px;
+      }
+  
+      .login img {
+          width: 100%;
+          max-width: 650px;
+      }
+  
+      input[type="text"], input[type="password"] {
+          font-size: 32px;
+          padding: 16px;
+      }
+  
+      input[type="submit"] {
+          font-size: 32px;
+          padding: 18px;
+      }
+  
+      .signup p, .signup a {
+          font-size: 32px;
+      }
+  
+      .message p {
+          font-size: 32px;
+      }
+  }
+  
+  </style>
+</head>
+<body>
+  <div class="login">
+    <img src="{% static 'css/safe.jpg' %}" alt="Logo">
+    <form action="{% url 'register' %}" method="POST">
+      {% csrf_token %}
+      <input type="text" placeholder="Enter your first name" name="first_name">
+      <input type="text" placeholder="Enter your last name" name="last_name">
+      <input type="text" placeholder="Enter your email" name="email">
+      <input type="password" placeholder="Create a password" name="password1">
+      <input type="password" placeholder="Confirm your password" name="password2">
+      <input type="submit" class="button" value="Signup">
+      {% if error %}
+      <p class="error">{{ error }}</p>
+      {% endif %}
+    </form>
+    <div class="signup">
+      <span>Already have an account?
+        <a href="{% url 'login' %}"><label for="check">SignIn</label></a>
+      </span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intruder Alert</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-size: 42px;
+            color: #D32F2F; /* Strong red for alert */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 24px;
+            color: #555;
+            margin: 10px 0 30px;
+        }
+
+        img {
+            height: 300px;
+            object-fit: contain;
+            margin-bottom: 25px;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: #FF6F61;
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #e0554c;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            img {
+                height: 220px;
+            }
+
+            p {
+                font-size: 20px;
+            }
+
+            .logout-btn {
+                font-size: 22px;
+                padding: 12px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YOU ARE AN INTRUDER</h1>
+        <img src="{% static 'css/safe.jpg' %}" alt="Intruder Image">
+        <p>YOU ARE NOT VERIFIED</p>
+        <p>CONTACT ADMIN IMMEDIATELY</p>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,304 @@
+{% comment %} {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static 'css/images.jpg' %}" type="image/x-icon">
+  <title>Zoon</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <div class="login form">
+      <center><img src="{% static 'css/images.jpg' %}"></center>
+      <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" placeholder="Enter your email" name="email">
+        <input type="password" placeholder="Enter your password" name="password">
+        <input type="submit" class="button" value="Login">
+        <center>
+          {% if success %}
+          <p style="color: green;"><b>{{ success }}</b></p>
+          {% endif %}
+          {% if error %}
+          <p style="color: red;">{{ error }}</p>
+          {% endif %}
+        </center>
+      </form>
+      <div class="signup">
+        <span class="signup">Don't have an account?
+         <a href="{% url 'register' %}"><label for="check">Signup</label></a>
+        </span>
+      </div>
+    </div>
+  </div>
+</body>
+</html> {% endcomment %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static 'css/safe.jpg' %}" type="image/x-icon">
+  <title>Intruder</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    /* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa; 
+    margin: 0;
+    padding: 0;
+    font-size: 36px; /* Increased default font size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+}
+
+/* Styling for the login form */
+.login {
+    background-color: white;
+    padding: 60px; /* Even more padding for luxurious space */
+    border-radius: 14px; /* Slightly larger rounded corners */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+    width: 100%;
+    max-width: 1100px; /* Increased max width for the form */
+    text-align: center;
+}
+
+/* Centered image styling */
+.login img {
+    width: 1100px; /* Larger image */
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 50px; /* More space below image */
+}
+
+/* Input field styling */
+input[type="text"], input[type="password"] {
+    padding: 20px; /* Bigger padding */
+    font-size: 38px; /* Larger input text */
+    margin-bottom: 24px; /* More space between fields */
+    border-radius: 10px; /* More rounded inputs */
+    border: 2px solid #ccc;
+    outline: none;
+    width: 100%;
+    transition: border 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #FF6F61;
+}
+
+/* Button styling */
+input[type="submit"] {
+    padding: 20px; /* Bigger button padding */
+    background-color: #97C1BC;
+    color: white;
+    font-size: 38px; /* Larger button text */
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #7a9c97;
+}
+
+/* Styling for success and error messages */
+.signup p, .signup a {
+    font-size: 38px; /* Larger signup link font */
+}
+
+/* Success and error message styling */
+.message p {
+    margin: 12px 0;
+    font-size: 38px; /* Larger messages */
+}
+
+.message .success {
+    color: green;
+}
+
+.message .error {
+    color: red;
+}
+
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+    body {
+        font-size: 30px;
+    }
+
+    .login {
+        padding: 60px;
+        max-width: 800px;
+    }
+
+    .login img {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    input[type="text"], input[type="password"] {
+        font-size: 32px;
+    }
+
+    input[type="submit"] {
+        font-size: 32px;
+    }
+
+    .signup p, .signup a {
+        font-size: 32px;
+    }
+
+    .message p {
+        font-size: 32px;
+    }
+}
+
+
+
+    {% comment %} /* General body styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fa; 
+        margin: 0;
+        padding: 0;
+        font-size: 30px; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; 
+    }
+
+    /* Styling for the login form */
+    .login {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 700px; /* Max width for the form */
+        text-align: center; /* Center the text */
+    }
+
+    /* Centered image styling */
+    .login img {
+        width: 600px; /* Increased image size to 600px width */
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 20px;
+    }
+
+    /* Input field styling */
+    input[type="text"], input[type="password"] {
+        padding: 12px;
+        font-size: 28px; /* Increased text size in input fields */
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 2px solid #ccc;
+        outline: none;
+        width: 100%; /* Full width for the input fields */
+        transition: border 0.3s ease;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+        border-color: #FF6F61; /* Border color changes on focus */
+    }
+
+    /* Button styling */
+    input[type="submit"] {
+        padding: 12px;
+        background-color: #97C1BC; /* Light teal background */
+        color: white;
+        font-size: 28px; /* Larger text size for the button */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%; /* Full width for the button */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #7a9c97; /* Slightly darker teal on hover */
+    }
+
+    /* Styling for success and error messages */
+    .signup p, .signup a {
+        font-size: 30px; /* Increased size for the signup text */
+    }
+
+    /* Success and error message styling */
+    .message p {
+        margin: 10px 0;
+        font-size: 28px; /* Increased message font size */
+    }
+
+    .message .success {
+        color: green;
+    }
+
+    .message .error {
+        color: red;
+    }
+
+    /* Responsive design for small screens */
+    @media (max-width: 768px) {
+        .login {
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 38px;
+        }
+
+        input[type="text"], input[type="password"] {
+            font-size: 30px; /* Larger text size on mobile */
+        }
+
+        input[type="submit"] {
+            font-size: 30px; /* Larger button text on mobile */
+        }
+
+        .signup p, .signup a {
+            font-size: 28px; /* Larger text size for signup links */
+        }
+    } {% endcomment %}
+  </style>
+</head>
+<body>
+    <div class="login">
+        <center><img src="{% static 'css/safe.jpg' %}" alt="Logo"></center>
+        <form action="{% url 'login' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" placeholder="Enter your email" name="email">
+            <input type="password" placeholder="Enter your password" name="password">
+            <input type="submit" class="button" value="Login">
+            <center>
+                {% if success %}
+                <p style="color: green;"><b>{{ success }}</b></p>
+                {% endif %}
+                {% if error %}
+                <p style="color: red;">{{ error }}</p>
+                {% endif %}
+            </center>
+        </form>
+        <div class="signup">
+            <span class="signup">Don't have an account?
+            <a href="{% url 'register' %}"><label for="check">Signup</label></a>
+            </span>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+{% load static %}
+{% comment %} <!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static 'css/images.jpg' %}" type="image/x-icon">
+  <title>Zoon</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <div class="login form">
+      <header>Join Room</header>
+      <form action="{% url 'join_room' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" placeholder="Enter room ID" name="roomID">
+        <input type="submit" class="button" value="Join">
+        <center>
+          {% if success %}
+          <p style="color: green;"><b>{{ success }}</b></p>
+          {% endif %}
+          {% if error %}
+          <p style="color: red;">{{ error }}</p>
+          {% endif %}
+        </center>
+      </form>
+    </div>
+  </div>
+</body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="shortcut icon" href="{% static 'css/safe.jpg' %}" type="image/x-icon">
+  <title>Intruder</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <style>
+    /* General body styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7fa; 
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; 
+    }
+
+    /* Styling for the form */
+    .login {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px; 
+    }
+
+    /* Header styling */
+    header {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #FF6F61; /* Color picked from the theme */
+    }
+
+    /* Form elements styling */
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    input[type="text"] {
+        padding: 12px;
+        font-size: 26px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        outline: none;
+        transition: border 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+        border-color: #FF6F61; /* Border color changes on focus */
+    }
+
+    input[type="submit"] {
+        padding: 12px;
+        background-color: #97C1BC; /* Light teal background */
+        color: white;
+        font-size: 28px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #7a9c97; 
+    }
+
+    /* Styling for the messages (success and error) */
+    .message {
+        text-align: center;
+    }
+
+    .message p {
+        margin: 10px 0;
+        font-size: 24px;
+    }
+
+    .message .success {
+        color: green;
+    }
+
+    .message .error {
+        color: red;
+    }
+
+    /* Responsive design for small screens */
+    @media (max-width: 768px) {
+        .login {
+            width: 90%;
+            padding: 20px;
+        }
+    }
+  </style>
+</head>
+<body>
+  <div class="login">
+    <header>Join Room</header>
+    <form action="{% url 'join_room' %}" method="POST">
+      {% csrf_token %}
+      <input type="text" placeholder="Enter room ID" name="roomID" required>
+      <input type="submit" class="button" value="Join">
+    </form>
+    <div class="message">
+      {% if success %}
+        <p class="success"><b>{{ success }}</b></p>
+      {% endif %}
+      {% if error %}
+        <p class="error"><b>{{ error }}</b></p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,419 @@
+{% comment %} {% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Verification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #FF6F61;
+            margin-bottom: 20px;
+        }
+
+        video, canvas {
+            border-radius: 8px;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        img.user-image {
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 20px;
+            background-color: #97C1BC;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #7a9c97;
+        }
+
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 30px;
+            }
+
+            .btn {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+
+            img.user-image {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ name }}!</h2>
+        <img src="{% static 'css/images.jpg' %}" alt="User Image" class="user-image">
+
+        <video id="video" autoplay muted playsinline></video>
+
+        <div class="buttons">
+            <a href="javascript:void(0);" class="btn" onclick="capturePhoto()">Capture Photo</a>
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        let stream = null;
+
+        async function initCamera() {
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const video = document.getElementById("video");
+            video.srcObject = stream;
+            await video.play();
+        }
+
+        async function capturePhoto() {
+            const video = document.getElementById("video");
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            const context = canvas.getContext("2d");
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const imageData = canvas.toDataURL("image/jpeg");
+
+            // Send to backend
+            $.post("/process_face/", { image_data: imageData }, function(response) {
+                if (response.redirect_url) {
+                    window.location.href = response.redirect_url;
+                }
+            });
+        }
+
+        // Start the camera when page loads
+        window.onload = initCamera;
+    </script>
+</body>
+</html> 
+{% load static %}
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Verification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        h2 {
+            font-size: 36px;
+            color: #FF6F61;
+            margin-bottom: 20px;
+        }
+        video, canvas {
+            border-radius: 8px;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        img.user-image {
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 20px;
+            background-color: #97C1BC;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #7a9c97;
+        }
+        @media (max-width: 768px) {
+            h2 { font-size: 30px; }
+            .btn { font-size: 18px; padding: 10px 20px; }
+            img.user-image { height: 120px; }
+        }
+    </style>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let cookie of cookies) {
+                    cookie = cookie.trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrftoken = getCookie('csrftoken');
+        
+        $.ajaxSetup({
+            headers: { 'X-CSRFToken': csrftoken }
+        });
+        
+        document.getElementById('capture-btn').addEventListener('click', function() {
+            const video = document.querySelector('video');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+        
+            try {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = canvas.toDataURL('image/png');
+        
+                $.ajax({
+                    url: '/process_face/',
+                    method: 'POST',
+                    data: {
+                        'image_data': imageData
+                    },
+                    success: function(response) {
+                        if (response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        } else {
+                            alert('Capture successful, but no redirect specified.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Capture failed:", error);
+                        console.log("XHR response:", xhr.responseText);
+                        alert("Failed to capture. See console.");
+                    }
+                });
+            } catch (err) {
+                console.error("Error capturing photo:", err);
+                alert("Capture failed. Check if webcam is active.");
+            }
+        });
+        // Init
+        window.onload = initCamera;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ name }}!</h2>
+        {% comment %} <img src="{% static 'css/images.jpg' %}" alt="User Image" class="user-image"> 
+        <video id="video" autoplay muted playsinline></video>
+        <div class="buttons">
+            <a href="javascript:void(0);" class="btn" onclick="capturePhoto()">Capture Photo</a>
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+        </div>
+    </div>
+</body>
+</html> {% endcomment %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Verification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        h2 {
+            font-size: 36px;
+            color: #FF6F61;
+            margin-bottom: 20px;
+        }
+        video {
+            border-radius: 8px;
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            margin-bottom: 20px;
+            background-color: #ddd;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 20px;
+            background-color: #97C1BC;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .btn:hover {
+            background-color: #7a9c97;
+        }
+        #loading {
+            display: none;
+            margin: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        @media (max-width: 768px) {
+            h2 { font-size: 30px; }
+            .btn { font-size: 18px; padding: 10px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome, {{ name }}!</h2>
+        <video id="video" autoplay playsinline></video>
+        <div id="loading">Processing face recognition...</div>
+        <div class="buttons">
+            <button class="btn" id="capture-btn">Verify Yourself</button>
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        // Camera initialization
+        const video = document.getElementById('video');
+        const captureBtn = document.getElementById('capture-btn');
+        const loading = document.getElementById('loading');
+        
+        // Start camera
+        async function initCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user' // Front camera
+                    },
+                    audio: false 
+                });
+                video.srcObject = stream;
+                video.onloadedmetadata = () => {
+                    video.play();
+                };
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                alert("Could not access the camera. Please check permissions.");
+            }
+        }
+        
+        // Capture photo
+        captureBtn.addEventListener('click', async function() {
+            try {
+                loading.style.display = 'block';
+                captureBtn.disabled = true;
+                
+                // Create canvas and draw video frame
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Convert to base64
+                const imageData = canvas.toDataURL('image/jpeg', 0.8);
+                
+                // Send to server
+                const response = await fetch('/process_face/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: `image_data=${encodeURIComponent(imageData)}`
+                });
+                
+                const result = await response.json();
+                
+                if (result.redirect_url) {
+                    window.location.href = result.redirect_url;
+                } else if (result.error) {
+                    alert("Error: " + result.error);
+                }
+            } catch (err) {
+                console.error("Capture failed:", err);
+                alert("Failed to capture photo. Please try again.");
+            } finally {
+                loading.style.display = 'none';
+                captureBtn.disabled = false;
+            }
+        });
+        
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        // Initialize camera when page loads
+        window.addEventListener('DOMContentLoaded', initCamera);
+    </script>
+</body>
+</html>
